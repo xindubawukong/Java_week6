@@ -1,6 +1,12 @@
 import java.io.*;
 
 /** Lab 13. CS1110 Exception handling */
+class MyException extends Exception{
+	MyException(){}
+	MyException(String s){
+		System.out.println(s);
+	}
+}
 public class Lab13 {
     /** = a buffered reader attached to the keyboard. If you store this value
       *   in a variable kbd (say), then
@@ -33,15 +39,24 @@ public class Lab13 {
       */
     public static int readKeyboardInt() throws IOException {
         BufferedReader kyboard= getKeyboard();
-        return 0;
+        try{
+        	int x=Integer.parseInt(kyboard.readLine());
+        	return x;
+        }
+        catch(IOException e){
+        	System.out.println("read keyboard int failed!");
+        	return 0;
+        }
     }
     
     /** = b**c.
-          Precondition: c ³ 0
+          Precondition: c ï¿½ 0
         */
-    public static double exp(double b, int c) {
+    public static double exp(double b, int c) throws Exception{
         if (c == 0)
             return 1;
+        if (c<0)
+        	throw new MyException("c < 0 !");
         // c > 0
         if (c%2 == 0)
             return exp(b*b, c / 2);
@@ -52,9 +67,15 @@ public class Lab13 {
     /** = the value i such that x**i <= .00000001 but x**(i-1) is not.
           Throw MyException if x <= 0 or 1 <= x. 
        */
-    public static int approach(double x) {
+    public static int approach(double x) throws Exception{
+    		if (x<0) throw new MyException("x < 0 !");
+    		if (x>1) throw new MyException("x > 1 !");
         int i= 1; // stub; you have to complete this function
+        double tmp=x;
+        while (tmp>=0.1){
+        	i++;
+        	tmp*=x;
+        }
         return i;
-        
     }
 }
